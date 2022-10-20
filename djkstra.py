@@ -64,26 +64,34 @@ def graphBuilderAdjacencyList():
 
                     
 
-    #for i in range(0, len(graph)):
-     #           graph[i].printl()
+    for i in range(0, len(graph)):
+                graph[i].printl()
 
     return graph
 '''
 def Dijkstra(graph, root):
+
     s = root-1
     dist = [math.inf]*len(graph)
     S = []
     dist[s] = 0
-    while len(S) != len(graph):
-        u = graph[root]
-'''
 
-                     
+    temp = graph[root-1].head
+    
+
+    while len(S) != len(graph):
+
+        while graph[root-1].sucessor:
+
+            if temp.sucessor.
+            temp = temp.sucessor
+
+'''                 
 
 
 if __name__ == "__main__":
 
     u = graphBuilderAdjacencyList()
-    print(u[1].head.sucessor.vertex)
+    print(u[1].head)
 
 
