@@ -1,0 +1,5 @@
+I think that the problem on djkstra.py
+might be on the "ifs" of the QuickSort
+or even on the while, because that stuff
+doenst make any sense( it seems it stops just
+when s==e==None)
