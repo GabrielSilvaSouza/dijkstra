@@ -12,7 +12,6 @@ typedef struct node
 {
     int vertex;
  
-
     tuple<int, int> e_v;
  
     struct node* next;
@@ -31,11 +30,7 @@ Node* newVertex(int Vertex_a, int Vertex_b, int weight) {
 
 
 void nv(Node** head, int Vertex_a, int Vertex_b, int weight ) {
-        //cout<< "throught here";
-        //cout << (*head)->vertex;
-        //exit(0);
-
- 
+    
         Node* start = (*head);
         Node* temp = newVertex(Vertex_a, Vertex_b, weight);
         if (get<0>((*head)->e_v) > weight)
@@ -75,24 +70,13 @@ void builder(){
         nv(&s, Vertex_a, Vertex_b, weight);
     }
 
-
     cout << s->next->vertex;
 
-/*
-    while (s != NULL)
-    {
-        cout << s->vertex;
-        cout << "\n";
-        s = s->next;
-    }
-    
-*/
     infile.close();
 }
  
 
 int main() {
-
 
     clock_t start, end;
     double cpu_time_used;
@@ -100,14 +84,9 @@ int main() {
 	start = clock();
     
     builder();
-	//graphBuilderAdjacencyVector( numberVertex, graphLL,  Vertex_a, Vertex_b);
 
     end = clock();
-
     cpu_time_used = ((double) (end-start)) / CLOCKS_PER_SEC;
-    //cout << cpu_time_used;
-
-	
 
 	return 0;
     

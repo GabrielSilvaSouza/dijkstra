@@ -1,3 +1,4 @@
+from heapq import heapify
 import math
 
 class NodeLinked(object):
@@ -105,20 +106,25 @@ def graphBuilderAdjacencyList():
 
     return graph               
 
+
 def Dijkstra(graph, root):
-
-    s = root
+    #idea: sort tuples instead of quicksort
     dist = [math.inf]*len(graph)
+    start = graph[root].head
+    prev = []
     S = []
-    dist[s] = 0
+    dist[root] = 0
+    pseudo_queue = []
+    pseudo_queue.append(start.vertex)
 
-    temp = graph[root].head
-    
+    while (start.sucessor):
+        pseudo_queue.insert(0, start.sucessor.vertex)
+        start = start.sucessor
 
-    while len(S) != len(graph):
-
-        while graph[root].sucessor:
-            pass
+    while len(pseudo_queue) != 0:
+        d = pseudo_queue.index(pseudo_queue[len(pseudo_queue)-2:-1])
+        
+            
 
 if __name__ == "__main__":
 
@@ -130,6 +136,7 @@ if __name__ == "__main__":
             N = N.sucessor
             
         u[i].sort(u[i].head.sucessor, N)
+    
 
     
     
