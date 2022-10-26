@@ -4,6 +4,7 @@
         "*.tcc": "cpp",
         "iostream": "cpp",
         "future": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "tuple": "cpp"
     }
 }
