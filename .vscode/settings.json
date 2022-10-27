@@ -5,6 +5,10 @@
         "iostream": "cpp",
         "future": "cpp",
         "new": "cpp",
-        "tuple": "cpp"
+        "tuple": "cpp",
+        "array": "cpp",
+        "utility": "cpp",
+        "variant": "cpp",
+        "ostream": "cpp"
     }
 }
