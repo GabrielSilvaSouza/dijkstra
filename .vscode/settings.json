@@ -9,6 +9,7 @@
         "array": "cpp",
         "utility": "cpp",
         "variant": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "chrono": "cpp"
     }
 }
