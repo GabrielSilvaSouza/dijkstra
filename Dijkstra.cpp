@@ -8,20 +8,40 @@
 
 using namespace std;
 
+template <typename... tpl>
+
+class custom_priority_queue : public std::priority_queue<tpl, std::vector<tpl>>
+{
+  public:
+      bool remove(const tpl& value) {
+          auto it = std::find(this->c.begin(), this->c.end(), value);
+       
+          if (it == this->c.end()) {
+              return false;
+          }
+          if (it == this->c.begin()) {
+              this->pop();
+          }    
+          else {
+              this->c.erase(it);
+              std::make_heap(this->c.begin(), this->c.end(), this->comp);
+         }
+         return true;
+     }
+};
+
 class Graph { 
 
-    int root; 
+    int numberVertex; 
 
     vector< tuple <int, float> > * graphLL;  
-
-    int numberVertex;
 
 public:
 
     Graph(int n) 
     {
 
-        ifstream infile("grafo_W_1_1.txt"); 
+        ifstream infile("grafo_1.txt"); 
         int numberVertex;
         infile >> numberVertex;
         infile.close();
@@ -29,14 +49,14 @@ public:
         //this->numberVertex = numberVertex;
 
         graphLL = new vector< tuple <int, float> > [numberVertex+1];
-
     }
+
 
     void graphBuilderAdjacencyVector(int Vertex_a, int Vertex_b) 
     {
             
         float weight;
-        ifstream infile("grafo_W_1_1.txt"); 
+        ifstream infile("grafo_1.txt"); 
         infile >> weight;
 
         while(infile >> Vertex_a >> Vertex_b >> weight ) 
@@ -56,9 +76,56 @@ public:
             sort(graphLL[Vertex_b].begin(), graphLL[Vertex_b].end());
 
         }
-    
+
     } 
-    
+
+    void dijkstra_heapado(int start, int numberVertex) 
+    {
+
+        custom_priority_queue <tuple <int, float>, vector< tuple <int, float> > > heapgraph;
+
+        vector<float> dist(numberVertex, numeric_limits<float>::infinity());
+        vector<int> position(numberVertex, 0);
+
+        list<int> explored, found;
+
+        explored.push_back(start);
+        found.push_back(start);
+
+        dist[start] = 0;
+
+        while (explored.size() != dist.size())
+        {
+            for (const auto& v : graphLL[start]) 
+            {
+
+                if (std::find(explored.begin(), explored.end(), get<0>(v) ) == explored.end()) 
+                {
+                    found.push_back(get<0>(v));
+                }
+                
+                if (dist[get<0>(v)] > (dist[start] + get<1>(v))) 
+                {
+                    
+                    if (position[get<0>(v)] > get<1>(v)){
+
+                        position[get<0>(v)] = get<0>(v);
+                        heapgraph.push(make_tuple(get<0>(v),get<1>(v)));
+                    }
+                    
+                    position[get<0>(v)] = get<1>(v);
+
+                }
+
+                start = found.front();
+                explored.push_back(found.front());
+                found.pop_front();
+
+            }
+
+        }
+        
+    }
 
     void dijkstra(int start, int numberVertex) 
     {
@@ -89,7 +156,7 @@ public:
                     dist[get<0>(v)] = dist[start] + get<1>(v);
                 }
                 
-                if (cost[get<1>(v)] <= get<1>(v)) 
+                if (cost[get<1>(v)] <= get<1>(v)) //prim
                 {
                     cost[get<1>(v)] = get<1>(v);
                     cout << start << "-" << get<0>(v) << endl;
@@ -104,55 +171,24 @@ public:
         }
 
     }
-
-    void dijkstra_heapado(int start, int numberVertex) {
-        
-    }
-
 };
+
+//escreve apenas uma vez
 
 int main() {
     
     int Vertex_a, Vertex_b;
 
-    ifstream infile("grafo_W_1_1.txt"); 
+    ifstream infile("grafo_1.txt"); 
     int numberVertex;
     infile >> numberVertex;
     infile.close();
- 
 
     Graph u(0); 
 
 	u.graphBuilderAdjacencyVector(Vertex_a, Vertex_b);
-    u.dijkstra(185,numberVertex+1);
+    u.dijkstra(1,numberVertex+1);
     
     return 0;
 
 }
-
-
-                /*
-                cout << "avicci" << endl;
-                exit(0);
-                */  
-
-            /*
-            auto it = std::find_if(graphLL[start].begin(), graphLL[start].end(), [](const auto& e) {return std::get<0>(e) == start;});
-            explored.push_back(get<0>(it));
-            */
-
-
-        /*
-        for (const auto& i : graphLL[67] ) {
-            cout << get<0>(i) << endl;
-        }
-        */
-
-               /*
-
-        for (const auto& i : dist ) 
-        {
-            cout << i << endl;
-        }
-
-        */
