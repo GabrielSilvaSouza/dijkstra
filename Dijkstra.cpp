@@ -8,28 +8,6 @@
 
 using namespace std;
 
-template <typename... tpl>
-
-class custom_priority_queue : public std::priority_queue<tpl, std::vector<tpl>>
-{
-  public:
-      bool remove(const tpl& value) {
-          auto it = std::find(this->c.begin(), this->c.end(), value);
-       
-          if (it == this->c.end()) {
-              return false;
-          }
-          if (it == this->c.begin()) {
-              this->pop();
-          }    
-          else {
-              this->c.erase(it);
-              std::make_heap(this->c.begin(), this->c.end(), this->comp);
-         }
-         return true;
-     }
-};
-
 class Graph { 
 
     int numberVertex; 
@@ -77,16 +55,19 @@ public:
 
         }
 
+
+
     } 
 
     void dijkstra_heapado(int start, int numberVertex) 
     {
 
-        custom_priority_queue <tuple <int, float>, vector< tuple <int, float> > > heapgraph;
+        priority_queue < tuple <int, float> > heapgraph;
 
-        vector<float> dist(numberVertex, numeric_limits<float>::infinity());
+        vector<float> dist(numberVertex+1, numeric_limits<float>::infinity());
         vector<int> position(numberVertex, 0);
 
+        tuple<int, float> u;
         list<int> explored, found;
 
         explored.push_back(start);
@@ -96,33 +77,29 @@ public:
 
         while (explored.size() != dist.size())
         {
+
             for (const auto& v : graphLL[start]) 
             {
-
-                if (std::find(explored.begin(), explored.end(), get<0>(v) ) == explored.end()) 
+                
+                if (dist[get<0>(v)] > (dist[start] + get<1>(v))) //contando duas vezes por isso nao fica igual exp e dist
                 {
-                    found.push_back(get<0>(v));
+
+                    dist[get<0>(v)] = dist[start] + get<1>(v);
+                    heapgraph.push(make_tuple(get<0>(v),dist[get<0>(v)]));
+
                 }
                 
-                if (dist[get<0>(v)] > (dist[start] + get<1>(v))) 
-                {
-                    
-                    if (position[get<0>(v)] > get<1>(v)){
-
-                        position[get<0>(v)] = get<0>(v);
-                        heapgraph.push(make_tuple(get<0>(v),get<1>(v)));
-                    }
-                    
-                    position[get<0>(v)] = get<1>(v);
-
-                }
-
-                start = found.front();
-                explored.push_back(found.front());
-                found.pop_front();
-
             }
+            explored.push_back(start);
+            u = heapgraph.top();
+            start = get<0>(u);
+            heapgraph.pop();
 
+            
+        }
+
+        for(const auto& i: dist) {
+            cout << i << endl;
         }
         
     }
@@ -139,7 +116,7 @@ public:
 
         dist[start] = 0;
         
-
+//alteracao
         while (explored.size() != dist.size())
         {
 
@@ -173,8 +150,6 @@ public:
     }
 };
 
-//escreve apenas uma vez
-
 int main() {
     
     int Vertex_a, Vertex_b;
@@ -186,8 +161,14 @@ int main() {
 
     Graph u(0); 
 
+    clock_t start, end;
+    double cpu_time_used;
+    start = clock();
 	u.graphBuilderAdjacencyVector(Vertex_a, Vertex_b);
-    u.dijkstra(1,numberVertex+1);
+    cpu_time_used = ((double) (end-start)) / CLOCKS_PER_SEC;
+    cout << "\n";
+    cout << "Tempo gasto: " << cpu_time_used << endl;
+    u.dijkstra_heapado(2, numberVertex);
     
     return 0;
 
